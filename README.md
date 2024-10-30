@@ -19,4 +19,4 @@ git clone <https://github.com/silly-person-on-the-cheese-planet/Todo-labs>
 
 ## Автор
 
-* **Тараканов Павел 314А** - [silly-person-on-the-cheese-planet](https://github.com/silly-person-on-the-cheese-planet)
+* [**Тараканов Павел 314А**](https://github.com/silly-person-on-the-cheese-planet)
