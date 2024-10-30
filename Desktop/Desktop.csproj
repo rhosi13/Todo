@@ -83,6 +83,7 @@
     <Compile Include="Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Repository\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LogIn.xaml.cs">
@@ -140,13 +141,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.png" />
+    <Resource Include="images\logo.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="images\profile.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="images\" />
+    <Analyzer Include="..\..\..\..\..\..\Program Files %28x86%29\MySQL\MySQL Connector NET 8.4\MySql.Data.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="profile.png" />
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{f5456032-8fb6-4342-a4d8-10c603113be7}</Project>
+      <Name>Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
