@@ -15,8 +15,8 @@
 
 ## Установка
 
-git clone <https://github.com/silly-person-on-the-cheese-planet/Todo-labs>
+git clone <https://github.com/rhosi13/Todo>
 
 ## Автор
 
-* [**Тараканов Павел 314А**](https://github.com/silly-person-on-the-cheese-planet)
+* [**Бакшеев Владислав 314А**](https://github.com/rhosi13)
