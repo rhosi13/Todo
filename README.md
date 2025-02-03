@@ -15,7 +15,7 @@
 
 ## Установка
 
-git clone <https://github.com/srhosi13/Todo>
+git clone <https://github.com/rhosi13/Todo>
 
 ## Автор
 
