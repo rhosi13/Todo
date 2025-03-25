@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\checkmark.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
