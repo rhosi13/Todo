@@ -6,9 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Desktop
+namespace Desktop.View
 {
-    public partial class CreateNewTask : Window
+    public partial class CreateNewTask : Page
     {
         private string name;
         private List<TaskDictionary> userTasks;
@@ -125,7 +125,8 @@ namespace Desktop
 
                 TaskRepository.AddTaskDictionary(newTask);
                 userTasks.Add(newTask);
-                this.DialogResult = true;
+
+                this.NavigationService.Navigate(new Main(name, userTasks));
             }
             catch (Exception)
             {
@@ -148,18 +149,10 @@ namespace Desktop
             return false;
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove();
-            }
-        }
-
         private void CancelNewTaskButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Задача отменена!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-            this.DialogResult = false;
+            this.NavigationService.GoBack();
         }
 
         private void DeleteCategoryMenuItem_Click(object sender, RoutedEventArgs e)

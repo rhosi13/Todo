@@ -1,38 +1,22 @@
 ﻿using Entities;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace Desktop.Repository
 {
     public class UserRepository
     {
-        private static List<UserModel> userModels;
-        private static readonly string filePath = "users.json";
-
-        static UserRepository()
+        private static List<UserModel> userModels = new List<UserModel>
         {
-            if (File.Exists(filePath))
+            new UserModel
             {
-                var json = File.ReadAllText(filePath);
-                userModels = JsonConvert.DeserializeObject<List<UserModel>>(json);
+                Id = Guid.NewGuid(),
+                Name = "admin",
+                Email = "admin@mail.ru",
+                Password = "adminpass"
             }
-            else
-            {
-                userModels = new List<UserModel>
-                {
-                    new UserModel
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "admin",
-                        Email = "admin@mail.ru",
-                        Password = "adminpass"
-                    }
-                };
-            }
-        }
+        };
 
         public static bool RegisterUser(string name, string mail, string password)
         {
@@ -50,7 +34,6 @@ namespace Desktop.Repository
             };
 
             userModels.Add(newUserModel);
-            SaveUsers();
             return true;
         }
 
@@ -59,29 +42,5 @@ namespace Desktop.Repository
 
         public static UserModel? GetUserByName(string name) =>
             userModels.FirstOrDefault(user => user.Name == name);
-
-        public static void SaveUserTasks(UserModel user)
-        {
-            var userFilePath = $"{user.Name}_tasks.json";
-            var json = JsonConvert.SerializeObject(user.Tasks, Formatting.Indented);
-            File.WriteAllText(userFilePath, json);
-        }
-
-        public static List<TaskDictionary> LoadUserTasks(string userName)
-        {
-            var userFilePath = $"{userName}_tasks.json";
-            if (File.Exists(userFilePath))
-            {
-                var json = File.ReadAllText(userFilePath);
-                return JsonConvert.DeserializeObject<List<TaskDictionary>>(json);
-            }
-            return new List<TaskDictionary>();
-        }
-
-        private static void SaveUsers()
-        {
-            var json = JsonConvert.SerializeObject(userModels, Formatting.Indented);
-            File.WriteAllText(filePath, json);
-        }
     }
 }

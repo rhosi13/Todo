@@ -5,9 +5,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Desktop.Repository;
 
-namespace Desktop
+namespace Desktop.View
 {
-    public partial class Registration : Window
+    public partial class Registration : Page
     {
         public Registration()
         {
@@ -97,9 +97,7 @@ namespace Desktop
 
         private void NazadB_Click(object sender, RoutedEventArgs e)
         {
-            LogIn logIn = new();
-            logIn.Show();
-            this.Close();
+            this.NavigationService.Navigate(new LogIn());
         }
 
         private void RegistrationB_Click(object sender, RoutedEventArgs e)
@@ -127,9 +125,7 @@ namespace Desktop
             {
                 if (UserRepository.RegisterUser(name, mail, password))
                 {
-                    MainEmpty mainEmpty = new MainEmpty(name);
-                    mainEmpty.Show();
-                    this.Close();
+                    this.NavigationService.Navigate(new MainEmpty(name));
                 }
                 else
                 {

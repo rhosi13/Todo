@@ -15,7 +15,6 @@ namespace Desktop.TaskFolder
         public TaskInfo()
         {
             InitializeComponent();
-            // Убедимся, что событие Click привязано только один раз
             DeleteB.Click -= DeleteB_Click;
             DoneB.Click -= DoneB_Click;
             DeleteB.Click += DeleteB_Click;
@@ -42,16 +41,8 @@ namespace Desktop.TaskFolder
         {
             if (Task != null)
             {
-                // Переключаем статус задачи
                 Task.IsCompleted = !Task.IsCompleted;
-
-                // Сохраняем изменения в репозитории
-                TaskRepository.SaveTasks();
-
-                // Вызываем событие обновления задач
-                TaskRepository.GetTaskRepository().RefreshTaskItems();
-
-                // Скрываем панель TaskInfo
+                TaskRepository.RefreshTaskItems();
                 this.Visibility = Visibility.Collapsed;
             }
         }
@@ -66,4 +57,3 @@ namespace Desktop.TaskFolder
         }
     }
 }
-

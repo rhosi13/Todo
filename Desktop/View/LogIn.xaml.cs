@@ -6,9 +6,9 @@ using System.Windows.Media;
 using Desktop.Repository;
 using Entities;
 
-namespace Desktop
+namespace Desktop.View
 {
-    public partial class LogIn : Window
+    public partial class LogIn : Page
     {
         private string name;
 
@@ -65,9 +65,7 @@ namespace Desktop
 
         private void RegistrationB_Click(object sender, RoutedEventArgs e)
         {
-            Registration reg = new();
-            reg.Show();
-            this.Close();
+            this.NavigationService.Navigate(new Registration());
         }
 
         private void LoginB_Click(object sender, RoutedEventArgs e)
@@ -89,18 +87,15 @@ namespace Desktop
                 if (user != null)
                 {
                     name = user.Name;
-                    var tasks = UserRepository.LoadUserTasks(user.Name);
+                    var tasks = TaskRepository.GetTaskRepository().GetTaskReposes();
                     if (tasks.Count == 0)
                     {
-                        MainEmpty mainEmpty = new MainEmpty(name);
-                        mainEmpty.Show();
+                        this.NavigationService.Navigate(new MainEmpty(name));
                     }
                     else
                     {
-                        Main main = new Main(name, tasks);
-                        main.Show();
+                        this.NavigationService.Navigate(new Main(name, tasks));
                     }
-                    this.Close();
                 }
                 else
                 {

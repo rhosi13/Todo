@@ -2,21 +2,15 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 
-namespace Desktop
+namespace Desktop.View
 {
-    public partial class MainEmpty : Window
+    public partial class MainEmpty : Page
     {
         private string userName;
         private List<TaskDictionary> userTasks;
@@ -27,6 +21,15 @@ namespace Desktop
             this.userName = userName;
             UserNameBlock.Text = userName;
             userTasks = new List<TaskDictionary>();
+
+            // Animation for UserNameBlock
+            var animation = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = new Duration(TimeSpan.FromSeconds(1))
+            };
+            UserNameBlock.BeginAnimation(UIElement.OpacityProperty, animation);
         }
 
         private void ProfileImageSwitch_Click(object sender, RoutedEventArgs e)
@@ -56,35 +59,12 @@ namespace Desktop
 
         private void ExitB_Click(object sender, RoutedEventArgs e)
         {
-            LogIn logIn = new();
-            logIn.Show();
-            this.Close();
+            this.NavigationService.Navigate(new LogIn());
         }
 
         private void zada4aB_Click(object sender, RoutedEventArgs e)
         {
-            CreateNewTask createNewTask = new CreateNewTask(userName, userTasks);
-            createNewTask.ShowDialog();
-
-            if (createNewTask.DialogResult == true)
-            {
-                Main main = new Main(userName, userTasks);
-                main.Show();
-                this.Close();
-            }
-        }
-
-        private void CreateNewCategory(string categoryName)
-        {
-            if (string.IsNullOrWhiteSpace(categoryName) || categoryName.Contains(" "))
-            {
-                MessageBox.Show("Название категории не может содержать пробелы и быть пустым.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            // Создаем новую категорию
-            userTasks.Add(new TaskDictionary { Category = categoryName });
-            MessageBox.Show("Новая категория создана успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.NavigationService.Navigate(new CreateNewTask(userName, userTasks));
         }
     }
 }

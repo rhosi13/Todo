@@ -1,11 +1,11 @@
-﻿<Window x:Class="Desktop.MainEmpty"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Desktop"
-        mc:Ignorable="d"
-        Title="Main Empty" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+﻿<Page x:Class="Desktop.View.MainEmpty"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:Desktop.View"
+      mc:Ignorable="d"
+      Title="Main Empty">
     <Grid>
         <Label Content="Добро пожаловать!" HorizontalAlignment="Left" Margin="175,96,0,0" VerticalAlignment="Top" FontSize="30"/>
         <Label Content="Создайте свою первую&#xD;&#xA;задачу!" HorizontalAlignment="Left" Margin="175,167,0,0" VerticalAlignment="Top" FontSize="30"/>
@@ -18,11 +18,11 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock x:Name="UserNameBlock" VerticalAlignment="Top" FontSize="18" Margin="0,106,0,0" TextAlignment="Center" Width="100" Height="21" HorizontalAlignment="Left"/>
         <Image x:Name="profileImageButton" HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="/images/profile.png" MouseEnter="ProfileImageButton_MouseEnter"/>
+        <TextBlock x:Name="UserNameBlock" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Foreground="Black" Margin="0,106,0,0" Width="100" Height="21" TextAlignment="Center"/>
         <Grid x:Name="menuGrid" Margin="0,0,645,422" Background="#FFE6E6E6" MouseLeave="MenuGrid_MouseLeave" Height="162" Width="155" Visibility="Hidden">
             <Button x:Name="exitB" Content="Выход" HorizontalAlignment="Left" Margin="25,20,0,0" VerticalAlignment="Top" Width="53" FontSize="17" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Click="ExitB_Click"/>
             <Button x:Name="profileImageSwitch" Content="Изменить&#xD;&#xA;фото&#xD;&#xA;профиля" HorizontalAlignment="Left" Margin="25,60,0,0" VerticalAlignment="Top" Width="80" FontSize="17" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Click="ProfileImageSwitch_Click"/>
         </Grid>
     </Grid>
-</Window>
+</Page>

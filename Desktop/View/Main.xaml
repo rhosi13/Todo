@@ -1,12 +1,12 @@
-﻿<Window x:Class="Desktop.Main"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Desktop"
-        xmlns:taskfolder="clr-namespace:Desktop.TaskFolder"
-        mc:Ignorable="d"
-        Title="Main" Height="600" Width="800" ResizeMode="NoResize">
+﻿<Page x:Class="Desktop.View.Main"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:Desktop.View"
+      xmlns:taskfolder="clr-namespace:Desktop.TaskFolder"
+      mc:Ignorable="d"
+      Title="Main">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
@@ -41,7 +41,6 @@
 
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                 <StackPanel x:Name="CategorySPanel" Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <!-- Existing categories -->
                     <TextBlock Text="Дом" FontSize="18" Margin="40 0 0 0" Foreground="#FF86C227" FontWeight="DemiBold" MouseDown="CategoryTextBlock_MouseDown"/>
                     <TextBlock Text="Работа" FontSize="18" Margin="30 0 0 0" Foreground="#FFD46221" FontWeight="DemiBold" MouseDown="CategoryTextBlock_MouseDown"/>
                     <TextBlock Text="Учеба" FontSize="18" Margin="30 0 0 0" Foreground="#FF4947C0" FontWeight="DemiBold" MouseDown="CategoryTextBlock_MouseDown"/>
@@ -75,4 +74,4 @@
             </Grid>
         </Grid>
     </Grid>
-</Window>
+</Page>
