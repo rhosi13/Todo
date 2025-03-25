@@ -71,5 +71,26 @@ namespace Desktop
             reg.Show();
             this.Close();
         }
+
+        private void loginB_Click(object sender, RoutedEventArgs e)
+        {
+            InputValidator inputValidator = new InputValidator();
+            string mail = mailBox.Text;
+            string password = passPASSwordBox.Password;
+
+            inputValidator.IsValidEmail(mail);
+            inputValidator.IsValidPassword(password);
+
+            if (!inputValidator.IsValidEmail(mail) || mailBox.Foreground == Brushes.Gray && mailBox.Text == "exam@yandex.ru")
+                MessageBox.Show("Указан неверный формат Почты!\nПример правильной Почты: example@mail.ru", "Ошибка авторизации [Почта]");
+            else if (!inputValidator.IsValidPassword(password))
+                MessageBox.Show("Слишком короткий Пароль!\nПароль обязательно должен содержать не менее шести символов.", "Ошибка авторизации [Пароль]");
+            else
+            {
+                MainEmpty mainempty = new MainEmpty();
+                mainempty.Show();
+                this.Close();
+            }
+        }
     }
 }

@@ -111,5 +111,34 @@ namespace Desktop
             logIn.Show();
             this.Close();
         }
+
+        private void registrationB_Click(object sender, RoutedEventArgs e)
+        {
+            InputValidator inputValidator = new InputValidator();
+            string mail = mailBox.Text;
+            string name = usernameBox.Text;
+            string password = passPASSwordBox.Password;
+
+            inputValidator.IsValidEmail(mail);
+            inputValidator.IsValidName(name);
+            inputValidator.IsValidPassword(password);
+
+            if (!inputValidator.IsValidName(name) || name == "Введите имя пользователя")
+            {
+                MessageBox.Show("Имя пользователя слишком короткое!\nИмя пользователя обязательно должно содержать не менее трех символов.", "Ошибка регистрации [Имя пользователя]");
+            }
+            else if (!inputValidator.IsValidEmail(mail) || mailBox.Foreground == Brushes.Gray && mailBox.Text == "exam@yandex.ru")
+                MessageBox.Show("Указан неверный формат Почты!\nПример правильной Почты: example@mail.ru", "Ошибка регистрации [Почта]");
+            else if (!inputValidator.IsValidPassword(password))
+                MessageBox.Show("Слишком короткий Пароль!\nПароль обязательно должен содержать не менее шести символов.", "Ошибка регистрации [Пароль]");
+            else if (password != pass2PASSwordBox.Password)
+                MessageBox.Show("Пароли должны совпадать!", "Ошибка регистрации [Пароль]");
+            else
+            {
+                MainEmpty mainempty = new MainEmpty();
+                mainempty.Show();
+                this.Close();
+            }
+        }
     }
 }
