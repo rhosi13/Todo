@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Entities;
 using System.Collections.Generic;
+using Desktop.Repository;
 
 public class ApiClient
 {
@@ -16,6 +17,9 @@ public class ApiClient
         client = new HttpClient { BaseAddress = new Uri(baseAddress) };
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        // Load token from local storage
+        token = LocalStorage.LoadToken();
     }
 
     public async Task<string> LoginAsync(string username, string password)
@@ -26,6 +30,10 @@ public class ApiClient
         var responseBody = await response.Content.ReadAsStringAsync();
         var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseBody);
         token = tokenResponse.Token;
+
+        // Save token to local storage
+        LocalStorage.SaveToken(token);
+
         return token;
     }
 

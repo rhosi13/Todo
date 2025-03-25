@@ -15,12 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="images\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
@@ -31,6 +25,9 @@
   <ItemGroup>
     <Resource Include="images\checkmark.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="images\profile.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

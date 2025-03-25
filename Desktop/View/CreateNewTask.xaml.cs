@@ -123,7 +123,7 @@ namespace Desktop.View
                     Date = selectedDate.ToShortDateString(),
                     Time = timeText,
                     IsCompleted = false,
-                    UserId = userId
+                    UserId = userId // Убедитесь, что UserId установлен
                 };
 
                 await TaskRepository.AddTaskDictionaryAsync(newTask);

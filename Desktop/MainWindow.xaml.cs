@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
 using Desktop.Repository;
+using Desktop.View;
 
 namespace Desktop
 {
@@ -9,9 +10,18 @@ namespace Desktop
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.Navigate(new View.LogIn());
             MainFrame.Navigating += MainFrame_Navigating;
             MainFrame.Navigated += MainFrame_Navigated;
+
+            string token = LocalStorage.LoadToken();
+            if (token != null)
+            {
+                MainFrame.Navigate(new MainEmpty("UserName", Guid.NewGuid()));
+            }
+            else
+            {
+                MainFrame.Navigate(new LogIn());
+            }
         }
 
         private void MainFrame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
@@ -40,6 +50,7 @@ namespace Desktop
         {
             base.OnClosed(e);
             LocalStorage.ClearTasks();
+            LocalStorage.ClearToken();
         }
     }
 }

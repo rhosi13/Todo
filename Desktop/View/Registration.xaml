@@ -8,7 +8,11 @@
       Title="Registration">
     <Grid>
         <Grid Margin="0,0,400,0">
-            <Image HorizontalAlignment="Left" Height="152" Margin="66,66,0,0" VerticalAlignment="Top" Width="152" Source="/images/logo.png" />
+            <Image HorizontalAlignment="Left" Height="152" Margin="66,66,0,0" VerticalAlignment="Top" Width="152" Source="/images/logo.png">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/logo.png"/>
+                </Image.OpacityMask>
+            </Image>
         </Grid>
         <Grid Margin="400,0,0,0" Width="400">
             <Label Content="Welcome back!" HorizontalAlignment="Left" Margin="0,44,0,0" VerticalAlignment="Top" FontSize="30"/>

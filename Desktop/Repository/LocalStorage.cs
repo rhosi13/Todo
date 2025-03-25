@@ -9,6 +9,7 @@ namespace Desktop.Repository
     public static class LocalStorage
     {
         private static readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TodoApp", "guestTasks.json");
+        private static readonly string tokenFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TodoApp", "token.json");
 
         static LocalStorage()
         {
@@ -40,6 +41,30 @@ namespace Desktop.Repository
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
+            }
+        }
+
+        public static void SaveToken(string token)
+        {
+            var json = JsonSerializer.Serialize(token);
+            File.WriteAllText(tokenFilePath, json);
+        }
+
+        public static string LoadToken()
+        {
+            if (File.Exists(tokenFilePath))
+            {
+                var json = File.ReadAllText(tokenFilePath);
+                return JsonSerializer.Deserialize<string>(json);
+            }
+            return null;
+        }
+
+        public static void ClearToken()
+        {
+            if (File.Exists(tokenFilePath))
+            {
+                File.Delete(tokenFilePath);
             }
         }
     }
