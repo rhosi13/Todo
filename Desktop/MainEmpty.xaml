@@ -19,10 +19,10 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Image x:Name="profileImageButton" HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="/images/profile.png" MouseEnter="profileImageButton_MouseEnter"/>
-        <Grid x:Name="menuGrid" Margin="0,0,645,422" Background="#FFE6E6E6" MouseLeave="menuGrid_MouseLeave" Height="162" Width="155" Visibility="Hidden">
-            <Button x:Name="exitB" Content="Выход" HorizontalAlignment="Left" Margin="25,20,0,0" VerticalAlignment="Top" Width="53" FontSize="17" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Click="exitB_Click"/>
-            <Button x:Name="profileImageSwitch" Content="Изменить&#xD;&#xA;фото&#xD;&#xA;профиля" HorizontalAlignment="Left" Margin="25,60,0,0" VerticalAlignment="Top" Width="80" FontSize="17" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Click="profileImageSwitch_Click"/>
+        <Image x:Name="profileImageButton" HorizontalAlignment="Left" Height="80" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Source="/images/profile.png" MouseEnter="ProfileImageButton_MouseEnter"/>
+        <Grid x:Name="menuGrid" Margin="0,0,645,422" Background="#FFE6E6E6" MouseLeave="MenuGrid_MouseLeave" Height="162" Width="155" Visibility="Hidden">
+            <Button x:Name="exitB" Content="Выход" HorizontalAlignment="Left" Margin="25,20,0,0" VerticalAlignment="Top" Width="53" FontSize="17" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Click="ExitB_Click"/>
+            <Button x:Name="profileImageSwitch" Content="Изменить&#xD;&#xA;фото&#xD;&#xA;профиля" HorizontalAlignment="Left" Margin="25,60,0,0" VerticalAlignment="Top" Width="80" FontSize="17" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Click="ProfileImageSwitch_Click"/>
         </Grid>
 
     </Grid>

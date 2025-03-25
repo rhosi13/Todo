@@ -25,11 +25,13 @@ namespace Desktop
             InitializeComponent();
         }
 
-        private void profileImageSwitch_Click(object sender, RoutedEventArgs e)
+        private void ProfileImageSwitch_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.png;*.jpg)| *.png;*.jpg";
-            openFileDialog.Title = "Выберите изображение профиля";
+            OpenFileDialog openFileDialog = new()
+            {
+                Filter = "Image Files (*.png;*.jpg)| *.png;*.jpg",
+                Title = "Выберите изображение профиля"
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -38,19 +40,19 @@ namespace Desktop
             }
         }
 
-        private void profileImageButton_MouseEnter(object sender, MouseEventArgs e)
+        private void ProfileImageButton_MouseEnter(object sender, MouseEventArgs e)
         {
             menuGrid.Visibility = Visibility.Visible;
         }
 
-        private void menuGrid_MouseLeave(object sender, MouseEventArgs e)
+        private void MenuGrid_MouseLeave(object sender, MouseEventArgs e)
         {
             menuGrid.Visibility = Visibility.Hidden;
         }
 
-        private void exitB_Click(object sender, RoutedEventArgs e)
+        private void ExitB_Click(object sender, RoutedEventArgs e)
         {
-            LogIn logIn = new LogIn();
+            LogIn logIn = new();
             logIn.Show();
             this.Close();
         }

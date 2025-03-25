@@ -29,7 +29,7 @@ namespace Desktop
             pass2Block.Foreground = Brushes.Gray;
         }
 
-        private void usernameBox_GotFocus(object sender, RoutedEventArgs e)
+        private void UsernameBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (usernameBox.Text == "Введите имя пользователя" && usernameBox.Foreground == Brushes.Gray)
             {
@@ -38,7 +38,7 @@ namespace Desktop
             }
         }
 
-        private void usernameBox_LostFocus(object sender, RoutedEventArgs e)
+        private void UsernameBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (usernameBox.Text == "")
             {
@@ -47,7 +47,7 @@ namespace Desktop
             }
         }
 
-        private void mailBox_GotFocus(object sender, RoutedEventArgs e)
+        private void MailBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (mailBox.Text == "exam@yandex.ru" && mailBox.Foreground == Brushes.Gray)
             {
@@ -56,7 +56,7 @@ namespace Desktop
             }
         }
 
-        private void mailBox_LostFocus(object sender, RoutedEventArgs e)
+        private void MailBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (mailBox.Text == "")
             {
@@ -65,19 +65,19 @@ namespace Desktop
             }
         }
 
-        private void passPASSwordBox_GotFocus(object sender, RoutedEventArgs e)
+        private void PassPASSwordBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (passPASSwordBox.Password == "")
                 passBlock.Visibility = Visibility.Hidden;
         }
 
-        private void passPASSwordBox_LostFocus(object sender, RoutedEventArgs e)
+        private void PassPASSwordBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (passPASSwordBox.Password == "")
                 passBlock.Visibility = Visibility.Visible;
         }
 
-        private void passPASSwordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private void PassPASSwordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (passPASSwordBox.Password != "")
                 passBlock.Visibility = Visibility.Hidden;
@@ -85,19 +85,19 @@ namespace Desktop
                 passBlock.Visibility = Visibility.Visible;
         }
 
-        private void pass2PASSwordBox_GotFocus(object sender, RoutedEventArgs e)
+        private void Pass2PASSwordBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (pass2PASSwordBox.Password == "")
                 pass2Block.Visibility = Visibility.Hidden;
         }
 
-        private void pass2PASSwordBox_LostFocus(object sender, RoutedEventArgs e)
+        private void Pass2PASSwordBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (pass2PASSwordBox.Password == "")
                 pass2Block.Visibility = Visibility.Visible;
         }
 
-        private void pass2PASSwordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private void Pass2PASSwordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (pass2PASSwordBox.Password != "")
                 pass2Block.Visibility = Visibility.Hidden;
@@ -105,16 +105,16 @@ namespace Desktop
                 pass2Block.Visibility = Visibility.Visible;
         }
 
-        private void nazadB_Click(object sender, RoutedEventArgs e)
+        private void NazadB_Click(object sender, RoutedEventArgs e)
         {
-            LogIn logIn = new LogIn();
+            LogIn logIn = new();
             logIn.Show();
             this.Close();
         }
 
-        private void registrationB_Click(object sender, RoutedEventArgs e)
+        private void RegistrationB_Click(object sender, RoutedEventArgs e)
         {
-            InputValidator inputValidator = new InputValidator();
+            InputValidator inputValidator = new();
             string mail = mailBox.Text;
             string name = usernameBox.Text;
             string password = passPASSwordBox.Password;
@@ -125,18 +125,18 @@ namespace Desktop
 
             if (!inputValidator.IsValidName(name) || name == "Введите имя пользователя")
             {
-                MessageBox.Show("Имя пользователя слишком короткое!\nИмя пользователя обязательно должно содержать не менее трех символов.", "Ошибка регистрации [Имя пользователя]");
+                MessageBox.Show("Имя пользователя слишком короткое!\nИмя пользователя обязательно должно содержать не менее трех символов.", "Ошибка регистрации [Имя пользователя]", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else if (!inputValidator.IsValidEmail(mail) || mailBox.Foreground == Brushes.Gray && mailBox.Text == "exam@yandex.ru")
-                MessageBox.Show("Указан неверный формат Почты!\nПример правильной Почты: example@mail.ru", "Ошибка регистрации [Почта]");
+                MessageBox.Show("Указан неверный формат Почты!\nПример правильной Почты: example@mail.ru", "Ошибка регистрации [Почта]", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (!inputValidator.IsValidPassword(password))
-                MessageBox.Show("Слишком короткий Пароль!\nПароль обязательно должен содержать не менее шести символов.", "Ошибка регистрации [Пароль]");
+                MessageBox.Show("Слишком короткий Пароль!\nПароль обязательно должен содержать не менее шести символов.", "Ошибка регистрации [Пароль]", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (password != pass2PASSwordBox.Password)
-                MessageBox.Show("Пароли должны совпадать!", "Ошибка регистрации [Пароль]");
+                MessageBox.Show("Пароли должны совпадать!", "Ошибка регистрации [Пароль]", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                MainEmpty mainempty = new MainEmpty();
-                mainempty.Show();
+                Main main = new(name);
+                main.Show();
                 this.Close();
             }
         }
