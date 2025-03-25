@@ -12,14 +12,12 @@ namespace Desktop.View
     {
         private string name;
         private List<TaskDictionary> userTasks;
-        private Guid userId;
 
-        public CreateNewTask(string name, List<TaskDictionary> userTasks, Guid userId)
+        public CreateNewTask(string name, List<TaskDictionary> userTasks)
         {
             InitializeComponent();
             this.name = name;
             this.userTasks = userTasks;
-            this.userId = userId;
         }
 
         private void TimePickerTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -82,7 +80,7 @@ namespace Desktop.View
             }
         }
 
-        private async void DoneNewTaskButton_Click(object sender, RoutedEventArgs e)
+        private void DoneNewTaskButton_Click(object sender, RoutedEventArgs e)
         {
             string titleText = TitleNewTaskTextBox.Text.Trim();
             if (string.IsNullOrEmpty(titleText))
@@ -122,18 +120,17 @@ namespace Desktop.View
                     Category = categoryText,
                     Date = selectedDate.ToShortDateString(),
                     Time = timeText,
-                    IsCompleted = false,
-                    UserId = userId
+                    IsCompleted = false
                 };
 
-                await TaskRepository.AddTaskDictionaryAsync(newTask);
-
+                TaskRepository.AddTaskDictionary(newTask);
                 userTasks.Add(newTask);
-                this.NavigationService.Navigate(new Main(name, userTasks, userId));
+
+                this.NavigationService.Navigate(new Main(name, userTasks));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка при создании задачи: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
             }
         }
 

@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Desktop.Repository;
-using Entities;
 
 namespace Desktop.View
 {
@@ -101,7 +100,7 @@ namespace Desktop.View
             this.NavigationService.Navigate(new LogIn());
         }
 
-        private async void RegistrationB_Click(object sender, RoutedEventArgs e)
+        private void RegistrationB_Click(object sender, RoutedEventArgs e)
         {
             InputValidator inputValidator = new();
             string mail = mailBox.Text;
@@ -124,22 +123,13 @@ namespace Desktop.View
                 MessageBox.Show("Пароли должны совпадать!", "Ошибка регистрации [Пароль]", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                var apiClient = new ApiClient("http://45.144.64.179");
-                try
+                if (UserRepository.RegisterUser(name, mail, password))
                 {
-                    var newUser = new UserModel
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = name,
-                        Email = mail,
-                        Password = password
-                    };
-                    await apiClient.PostAsync<UserModel>("/api/users", newUser);
-                    this.NavigationService.Navigate(new MainEmpty(name, newUser.Id));
+                    this.NavigationService.Navigate(new MainEmpty(name));
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Ошибка при регистрации: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Пользователь с таким именем или почтой уже существует.", "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

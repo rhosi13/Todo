@@ -2,62 +2,45 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Desktop.Repository
 {
     public class UserRepository
     {
-        private static readonly ApiClient apiClient = new ApiClient("http://45.144.64.179");
-
-        public static async Task<bool> RegisterUserAsync(UserModel user)
+        private static List<UserModel> userModels = new List<UserModel>
         {
-            try
+            new UserModel
             {
-                await apiClient.PostAsync<UserModel>("/api/users", user);
-                return true;
+                Id = Guid.NewGuid(),
+                Name = "admin",
+                Email = "admin@mail.ru",
+                Password = "adminpass"
             }
-            catch
+        };
+
+        public static bool RegisterUser(string name, string mail, string password)
+        {
+            if (userModels.Any(use => use.Name == name || use.Email == mail))
             {
                 return false;
             }
-        }
 
-        public static async Task<UserModel?> AuthorizeUserAsync(string mail, string password)
-        {
-            try
-            {
-                var users = await apiClient.GetAsync<List<UserModel>>("/api/users");
-                return users.FirstOrDefault(use => use.Email == mail && use.Password == password);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public static async Task<UserModel?> GetUserByNameAsync(string name)
-        {
-            try
-            {
-                var users = await apiClient.GetAsync<List<UserModel>>("/api/users");
-                return users.FirstOrDefault(user => user.Name == name);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public static UserModel GetGuestUser()
-        {
-            return new UserModel
+            var newUserModel = new UserModel
             {
                 Id = Guid.NewGuid(),
-                Name = "Guest",
-                Email = "guest@example.com",
-                Password = "guestpassword"
+                Name = name,
+                Email = mail,
+                Password = password
             };
+
+            userModels.Add(newUserModel);
+            return true;
         }
+
+        public static UserModel? AuthorizeUser(string mail, string password) =>
+            userModels.FirstOrDefault(use => use.Email == mail && use.Password == password);
+
+        public static UserModel? GetUserByName(string name) =>
+            userModels.FirstOrDefault(user => user.Name == name);
     }
 }
