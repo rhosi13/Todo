@@ -10,7 +10,7 @@
         <Grid Margin="0,0,400,0">
             <Image HorizontalAlignment="Left" Height="152" Margin="66,66,0,0" VerticalAlignment="Top" Width="152" Source="/images/logo.png">
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="/logo.png"/>
+                    <ImageBrush ImageSource="/images/logo.png"/>
                 </Image.OpacityMask>
             </Image>
         </Grid>
