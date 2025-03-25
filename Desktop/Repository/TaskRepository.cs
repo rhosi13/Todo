@@ -2,9 +2,9 @@
 using Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Desktop.Repository
 {
@@ -13,32 +13,43 @@ namespace Desktop.Repository
         public delegate void TaskItemsChangedDel();
         public event TaskItemsChangedDel? TaskItemsChanged;
 
-        private List<TaskDictionary> taskItems = new List<TaskDictionary> ();
+        private static List<TaskDictionary> taskItems = new List<TaskDictionary>();
+        private static readonly string filePath = "tasks.json";
 
-        private static TaskRepository tasksRepos { get; set; } = new TaskRepository ();
-        public static TaskRepository GetTaskRepository() { return tasksRepos; }
+        private static TaskRepository tasksRepos = new TaskRepository();
+        public static TaskRepository GetTaskRepository() => tasksRepos;
 
-
-        public List<TaskDictionary> GetTaskReposes()
+        static TaskRepository()
         {
-            return taskItems;
+            if (File.Exists(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                taskItems = JsonConvert.DeserializeObject<List<TaskDictionary>>(json);
+            }
         }
 
-        public void AddTaskDictionary(TaskDictionary dict)
+        public List<TaskDictionary> GetTaskReposes() => taskItems;
+
+        public static void AddTaskDictionary(TaskDictionary dict)
         {
             taskItems.Add(dict);
-            RefreshTaskItems();
+            SaveTasks();
+            tasksRepos.RefreshTaskItems();
         }
 
-        public void RemoveTaskDictionary(TaskDictionary dict)
+        public static void RemoveTaskDictionary(TaskDictionary dict)
         {
             taskItems.Remove(dict);
-            RefreshTaskItems();
+            SaveTasks();
+            tasksRepos.RefreshTaskItems();
         }
 
-        public TaskDictionary? GetTaskRepos(int id)
+        public TaskDictionary? GetTaskRepos(int id) => taskItems.FirstOrDefault(x => x.Id == id);
+
+        public static void SaveTasks()
         {
-            return taskItems.FirstOrDefault(x => x.Id == id);
+            var json = JsonConvert.SerializeObject(taskItems, Formatting.Indented);
+            File.WriteAllText(filePath, json);
         }
 
         public void RefreshTaskItems()

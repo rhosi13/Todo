@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Entities;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,17 @@ using System.Windows.Shapes;
 
 namespace Desktop
 {
-    /// <summary>
-    /// Логика взаимодействия для MainEmpty.xaml
-    /// </summary>
     public partial class MainEmpty : Window
     {
-        public MainEmpty()
+        private string userName;
+        private List<TaskDictionary> userTasks;
+
+        public MainEmpty(string userName)
         {
             InitializeComponent();
+            this.userName = userName;
+            UserNameBlock.Text = userName;
+            userTasks = new List<TaskDictionary>();
         }
 
         private void ProfileImageSwitch_Click(object sender, RoutedEventArgs e)
@@ -55,6 +59,32 @@ namespace Desktop
             LogIn logIn = new();
             logIn.Show();
             this.Close();
+        }
+
+        private void zada4aB_Click(object sender, RoutedEventArgs e)
+        {
+            CreateNewTask createNewTask = new CreateNewTask(userName, userTasks);
+            createNewTask.ShowDialog();
+
+            if (createNewTask.DialogResult == true)
+            {
+                Main main = new Main(userName, userTasks);
+                main.Show();
+                this.Close();
+            }
+        }
+
+        private void CreateNewCategory(string categoryName)
+        {
+            if (string.IsNullOrWhiteSpace(categoryName) || categoryName.Contains(" "))
+            {
+                MessageBox.Show("Название категории не может содержать пробелы и быть пустым.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Создаем новую категорию
+            userTasks.Add(new TaskDictionary { Category = categoryName });
+            MessageBox.Show("Новая категория создана успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

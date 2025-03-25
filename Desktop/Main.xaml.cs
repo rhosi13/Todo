@@ -1,85 +1,58 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Desktop.Repository;
 using Desktop.TaskFolder;
 using Entities;
-using System.ComponentModel;
+using System.Windows.Media.Effects;
 
 namespace Desktop
 {
-    /// <summary>
-    /// Логика взаимодействия для Main.xaml
-    /// </summary>
     public partial class Main : Window
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private bool showCompletedTasks = false;
+        private List<TaskDictionary> userTasks;
+        private string userName;
+        private string selectedCategory = "All";
 
-        public Main(string name)
+        public Main(string name, List<TaskDictionary> tasks)
         {
-            
-            var taskRepos = TaskRepository.GetTaskRepository();
-
             InitializeComponent();
-
+            userName = name;
             UserNameBlock.Text = name;
+            userTasks = tasks;
+            InitializeTasks(userTasks);
+            InitializeCategories();
 
-            var taskItem1 = new TaskDictionary()
-            {
-                Id = 1,
-                Name = "Пойти на рыбалку со Стефаном",
-                Description = "Стефан обещал поделиться своими советами по ловле, и я с нетерпением жду, чтобы применить их на практике.",
-                Date = "01 Ноября 2024",
-                Time = "9:00",
-                IsCompleted = true
-            };
-
-            var taskItem2 = new TaskDictionary()
-            {
-                Id = 2,
-                Name = "Прочитать книгу Златана",
-                Description = "Интересная книга, которая не уходит из моей памяти уже как пару месяцев, стоит прочитать.",
-                Date = "31 Декабря 2024",
-                Time = "6:00",
-                IsCompleted = false
-            };
-
-            var taskItem3 = new TaskDictionary()
-            {
-                Id = 3,
-                Name = "Встретиться с командой дизайнеров",
-                Description = "Назначена встреча, обязательная задача.",
-                Date = "22 Ноября 2024",
-                Time = "3:00",
-                IsCompleted = false
-            };
-
-
-            taskRepos.AddTaskDictionary(taskItem1);
-            taskRepos.AddTaskDictionary(taskItem2);
-            taskRepos.AddTaskDictionary(taskItem3);
-
-            InitializeTasks(taskRepos.GetTaskReposes());
-
-            taskRepos.TaskItemsChanged += TaskReposChanged;
+            // Подписываемся на событие обновления задач
+            TaskRepository.GetTaskRepository().TaskItemsChanged += RefreshTasks;
         }
 
-        private void TaskReposChanged()
+        private void InitializeCategories()
         {
-            InitializeTasks(TaskRepository.GetTaskRepository().GetTaskReposes());
+            var categories = userTasks.Select(t => t.Category).Distinct().ToList();
+            foreach (var category in categories)
+            {
+                if (!CategorySPanel.Children.Cast<TextBlock>().Any(tb => tb.Text == category))
+                {
+                    var textBlock = new TextBlock
+                    {
+                        Text = category,
+                        FontSize = 18,
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Foreground = Brushes.Black,
+                        FontWeight = FontWeights.DemiBold
+                    };
+                    textBlock.MouseDown += CategoryTextBlock_MouseDown;
+                    CategorySPanel.Children.Add(textBlock);
+                }
+            }
         }
 
         private void InitializeTasks(List<TaskDictionary> taskItems)
@@ -88,37 +61,65 @@ namespace Desktop
 
             foreach (TaskDictionary task in taskItems)
             {
-                var item = new TaskItem();
-                item.InfoLoad(task);
-                item.Margin = new Thickness(10);
-                item.Effect = new DropShadowEffect()
+                if ((showCompletedTasks && task.IsCompleted) || (!showCompletedTasks && !task.IsCompleted && (selectedCategory == "All" || task.Category == selectedCategory)))
                 {
-                    ShadowDepth = 5,
-                    Direction = -90,
-                    BlurRadius = 20,
-                    Color = System.Windows.Media.Color.FromArgb(0xF2, 0xF2, 0xF2, 0xF2),
-                };
+                    var item = new TaskItem();
+                    item.InfoLoad(task);
+                    item.Margin = new Thickness(10);
+                    item.Effect = new DropShadowEffect
+                    {
+                        ShadowDepth = 5,
+                        Direction = -90,
+                        BlurRadius = 20,
+                        Color = Colors.Gray,
+                    };
 
-                item.MouseDown += TaskItem_MouseDown;
-                ItemsTasksSPanel.Children.Add(item);
+                    switch (task.Category)
+                    {
+                        case "Дом":
+                            item.TitleTask.Foreground = Brushes.Green;
+                            break;
+                        case "Работа":
+                            item.TitleTask.Foreground = Brushes.Orange;
+                            break;
+                        case "Учеба":
+                            item.TitleTask.Foreground = Brushes.Blue;
+                            break;
+                        case "Отдых":
+                            item.TitleTask.Foreground = Brushes.Purple;
+                            break;
+                        default:
+                            item.TitleTask.Foreground = Brushes.Gray;
+                            break;
+                    }
 
+                    item.MouseDown += TaskItem_MouseDown;
+                    ItemsTasksSPanel.Children.Add(item);
+                }
             }
         }
 
         private void TaskItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var taskItem = (TaskItem)sender;
-            if (taskItem == null || taskItem.Task == null)
-                return;
+            if (taskItem == null || taskItem.Task == null) return;
 
             var item = taskItem.Task;
 
+            // Отображаем панель TaskInfo
+            TaskI.Visibility = Visibility.Visible;
             var itemInfo = new TaskInfo();
             itemInfo.InfoLoad(item);
 
             TaskInfoBlock.Children.Clear();
             TaskInfoBlock.Children.Add(itemInfo);
-            itemInfo.DeleteTaskItem += () => { TaskInfoBlock.Children.Clear(); };
+            itemInfo.DeleteTaskItem += (deletedTask) =>
+            {
+                TaskInfoBlock.Children.Clear();
+                userTasks.Remove(deletedTask);
+                InitializeTasks(userTasks);
+                InitializeCategories();
+            };
         }
 
         private void ProfileImageSwitch_Click(object sender, RoutedEventArgs e)
@@ -148,11 +149,93 @@ namespace Desktop
 
         private void ExitB_Click(object sender, RoutedEventArgs e)
         {
+            var user = UserRepository.GetUserByName(userName);
+            if (user != null)
+            {
+                user.Tasks = userTasks;
+                UserRepository.SaveUserTasks(user);
+            }
+
             LogIn logIn = new();
             logIn.Show();
             this.Close();
         }
 
-        
+        private void CreateNewTaskB_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CreateNewTask createNewTask = new CreateNewTask(userName, userTasks);
+            createNewTask.ShowDialog();
+
+            if (createNewTask.DialogResult == true)
+            {
+                InitializeTasks(userTasks);
+                InitializeCategories();
+            }
+        }
+
+        private void TasksTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            showCompletedTasks = false;
+            selectedCategory = "All";
+            InitializeTasks(userTasks);
+        }
+
+        private void HistoryTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            showCompletedTasks = true;
+            selectedCategory = "All"; // Показать все выполненные задачи независимо от категории
+            InitializeTasks(userTasks);
+        }
+
+        private void CategoryTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                var categoryTextBlock = (TextBlock)sender;
+                var categoryName = categoryTextBlock.Text;
+
+                var contextMenu = new ContextMenu();
+
+                var deleteMenuItem = new MenuItem { Header = "Удалить категорию" };
+                deleteMenuItem.Click += (s, args) => DeleteCategory(categoryName);
+
+                // Отключаем возможность удаления для категорий "Дом", "Отдых", "Работа" и "Учеба"
+                if (categoryName == "Дом" || categoryName == "Отдых" || categoryName == "Работа" || categoryName == "Учеба")
+                {
+                    deleteMenuItem.IsEnabled = false;
+                }
+
+                contextMenu.Items.Add(deleteMenuItem);
+
+                categoryTextBlock.ContextMenu = contextMenu;
+                contextMenu.IsOpen = true;
+            }
+            else
+            {
+                showCompletedTasks = false;
+                selectedCategory = ((TextBlock)sender).Text;
+                InitializeTasks(userTasks);
+            }
+        }
+
+        private void DeleteCategory(string categoryName)
+        {
+            userTasks.RemoveAll(task => task.Category == categoryName);
+            InitializeTasks(userTasks);
+
+            var textBlockToRemove = CategorySPanel.Children.Cast<TextBlock>().FirstOrDefault(tb => tb.Text == categoryName);
+            if (textBlockToRemove != null)
+            {
+                CategorySPanel.Children.Remove(textBlockToRemove);
+            }
+
+            MessageBox.Show("Категория удалена успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        // Метод для обновления списка задач
+        private void RefreshTasks()
+        {
+            InitializeTasks(userTasks);
+        }
     }
 }

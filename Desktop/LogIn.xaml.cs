@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Xml.Linq;
+using Desktop.Repository;
+using Entities;
 
 namespace Desktop
 {
-    /// <summary>
-    /// Логика взаимодействия для LogIn.xaml
-    /// </summary>
     public partial class LogIn : Window
     {
         private string name;
@@ -28,6 +18,11 @@ namespace Desktop
 
             mailBox.Foreground = Brushes.Gray;
             passBlock.Foreground = Brushes.Gray;
+
+            mailBox.TabIndex = 0;
+            passPASSwordBox.TabIndex = 1;
+            loginB.TabIndex = 2;
+            registrationB.TabIndex = 3;
         }
 
         private void MailBox_GotFocus(object sender, RoutedEventArgs e)
@@ -90,13 +85,27 @@ namespace Desktop
                 MessageBox.Show("Слишком короткий Пароль!\nПароль обязательно должен содержать не менее шести символов.", "Ошибка авторизации [Пароль]", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                //MainEmpty mainempty = new MainEmpty();
-                //mainempty.Show();
-                //this.Close();
-
-                Main main = new(name);
-                main.Show();
-                this.Close();
+                var user = UserRepository.AuthorizeUser(mail, password);
+                if (user != null)
+                {
+                    name = user.Name;
+                    var tasks = UserRepository.LoadUserTasks(user.Name);
+                    if (tasks.Count == 0)
+                    {
+                        MainEmpty mainEmpty = new MainEmpty(name);
+                        mainEmpty.Show();
+                    }
+                    else
+                    {
+                        Main main = new Main(name, tasks);
+                        main.Show();
+                    }
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неверная почта или пароль.", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

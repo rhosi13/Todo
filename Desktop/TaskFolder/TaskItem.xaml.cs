@@ -1,27 +1,15 @@
 ﻿using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Desktop.TaskFolder
 {
-    /// <summary>
-    /// Логика взаимодействия для TaskItem.xaml
-    /// </summary>
     public partial class TaskItem : UserControl
     {
         public TaskDictionary? Task;
+
         public TaskItem()
         {
             InitializeComponent();
@@ -29,7 +17,7 @@ namespace Desktop.TaskFolder
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
-            ItemTaskBorder.Background = new BrushConverter().ConvertFromString("#eeedfe") as SolidColorBrush;
+            ItemTaskBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#eeedfe"));
         }
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
@@ -45,8 +33,7 @@ namespace Desktop.TaskFolder
 
         public void InitializeTaskInfo()
         {
-            if (this.Task == null)
-                return;
+            if (this.Task == null) return;
 
             finishedEllipseCanvas.Visibility = Visibility.Collapsed;
             unfinishedEllipse.Visibility = Visibility.Collapsed;
@@ -60,7 +47,9 @@ namespace Desktop.TaskFolder
                 finishedEllipseCanvas.Visibility = Visibility.Visible;
             }
             else
+            {
                 unfinishedEllipse.Visibility = Visibility.Visible;
+            }
         }
     }
 }

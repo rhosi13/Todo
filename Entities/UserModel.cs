@@ -12,5 +12,6 @@ namespace Entities
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public List<TaskDictionary> Tasks { get; set; } = new List<TaskDictionary>();
     }
 }
