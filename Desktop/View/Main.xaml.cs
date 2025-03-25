@@ -11,7 +11,7 @@ using Desktop.Repository;
 using Desktop.TaskFolder;
 using Entities;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Animation;
+using System.Threading.Tasks;
 
 namespace Desktop.View
 {
@@ -21,26 +21,19 @@ namespace Desktop.View
         private List<TaskDictionary> userTasks;
         private string userName;
         private string selectedCategory = "All";
+        private Guid userId;
 
-        public Main(string name, List<TaskDictionary> tasks)
+        public Main(string name, List<TaskDictionary> tasks, Guid userId)
         {
             InitializeComponent();
             userName = name;
             UserNameBlock.Text = name;
             userTasks = tasks;
+            this.userId = userId;
             InitializeTasks(userTasks);
             InitializeCategories();
 
-            TaskRepository.GetTaskRepository().TaskItemsChanged += RefreshTasks;
-
-            // Animation for UserNameBlock
-            var animation = new DoubleAnimation
-            {
-                From = 0.0,
-                To = 1.0,
-                Duration = new Duration(TimeSpan.FromSeconds(1))
-            };
-            UserNameBlock.BeginAnimation(UIElement.OpacityProperty, animation);
+            TaskRepository.TaskItemsChanged += RefreshTasks;
         }
 
         private void InitializeCategories()
@@ -64,7 +57,7 @@ namespace Desktop.View
             }
         }
 
-        private void InitializeTasks(List<TaskDictionary> taskItems)
+        private async void InitializeTasks(List<TaskDictionary> taskItems)
         {
             ItemsTasksSPanel.Children.Clear();
 
@@ -108,7 +101,7 @@ namespace Desktop.View
             }
         }
 
-        private void TaskItem_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void TaskItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var taskItem = (TaskItem)sender;
             if (taskItem == null || taskItem.Task == null) return;
@@ -121,9 +114,10 @@ namespace Desktop.View
 
             TaskInfoBlock.Children.Clear();
             TaskInfoBlock.Children.Add(itemInfo);
-            itemInfo.DeleteTaskItem += (deletedTask) =>
+            itemInfo.DeleteTaskItem += async (deletedTask) =>
             {
                 TaskInfoBlock.Children.Clear();
+                await TaskRepository.RemoveTaskDictionaryAsync(deletedTask);
                 userTasks.Remove(deletedTask);
                 InitializeTasks(userTasks);
                 InitializeCategories();
@@ -162,7 +156,7 @@ namespace Desktop.View
 
         private void CreateNewTaskB_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.NavigationService.Navigate(new CreateNewTask(userName, userTasks));
+            this.NavigationService.Navigate(new CreateNewTask(userName, userTasks, userId));
         }
 
         private void TasksTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
@@ -223,8 +217,9 @@ namespace Desktop.View
             MessageBox.Show("Категория удалена успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void RefreshTasks()
+        private async void RefreshTasks()
         {
+            userTasks = await TaskRepository.GetTaskReposesAsync(userId);
             InitializeTasks(userTasks);
         }
     }

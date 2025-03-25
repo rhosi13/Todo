@@ -37,12 +37,12 @@ namespace Desktop.TaskFolder
             SubtitleItem.Text = Task.Description;
         }
 
-        private void DoneB_Click(object sender, RoutedEventArgs e)
+        private async void DoneB_Click(object sender, RoutedEventArgs e)
         {
             if (Task != null)
             {
                 Task.IsCompleted = !Task.IsCompleted;
-                TaskRepository.RefreshTaskItems();
+                await TaskRepository.UpdateTaskDictionaryAsync(Task);
                 this.Visibility = Visibility.Collapsed;
             }
         }
@@ -51,7 +51,6 @@ namespace Desktop.TaskFolder
         {
             if (Task != null)
             {
-                TaskRepository.RemoveTaskDictionary(Task);
                 DeleteTaskItem?.Invoke(Task);
             }
         }

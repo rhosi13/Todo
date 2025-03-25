@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
+using Desktop.Repository;
 
 namespace Desktop
 {
@@ -33,6 +34,12 @@ namespace Desktop
                 Duration = new Duration(TimeSpan.FromSeconds(0.5))
             };
             MainFrame.BeginAnimation(UIElement.OpacityProperty, animation);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            LocalStorage.ClearTasks();
         }
     }
 }
