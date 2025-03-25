@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -68,7 +69,7 @@ namespace Desktop.View
             this.NavigationService.Navigate(new Registration());
         }
 
-        private void LoginB_Click(object sender, RoutedEventArgs e)
+        private async void LoginB_Click(object sender, RoutedEventArgs e)
         {
             InputValidator inputValidator = new();
             string mail = mailBox.Text;
@@ -83,25 +84,42 @@ namespace Desktop.View
                 MessageBox.Show("Слишком короткий Пароль!\nПароль обязательно должен содержать не менее шести символов.", "Ошибка авторизации [Пароль]", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                var user = UserRepository.AuthorizeUser(mail, password);
-                if (user != null)
+                var apiClient = new ApiClient("http://45.144.64.179");
+                try
                 {
-                    name = user.Name;
-                    var tasks = TaskRepository.GetTaskRepository().GetTaskReposes();
-                    if (tasks.Count == 0)
+                    await apiClient.LoginAsync(mail, password);
+                    var user = await apiClient.GetAsync<UserModel>($"/api/users?email={mail}");
+                    if (user != null)
                     {
-                        this.NavigationService.Navigate(new MainEmpty(name));
+                        name = user.Name;
+                        var tasks = await apiClient.GetAsync<List<TaskDictionary>>($"/api/tasks?userId={user.Id}");
+                        if (tasks.Count == 0)
+                        {
+                            this.NavigationService.Navigate(new MainEmpty(name, user.Id));
+                        }
+                        else
+                        {
+                            this.NavigationService.Navigate(new Main(name, tasks, user.Id));
+                        }
                     }
                     else
                     {
-                        this.NavigationService.Navigate(new Main(name, tasks));
+                        MessageBox.Show("Неверная почта или пароль.", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-                else
+                catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    MessageBox.Show("Неверная почта или пароль.", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // Вход как гость
+                    name = "Guest";
+                    var tasks = new List<TaskDictionary>();
+                    this.NavigationService.Navigate(new Main(name, tasks, Guid.NewGuid()));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при входе: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+
     }
 }

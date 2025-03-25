@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Animation;
 
 namespace Desktop.View
 {
@@ -14,22 +13,15 @@ namespace Desktop.View
     {
         private string userName;
         private List<TaskDictionary> userTasks;
+        private Guid userId;
 
-        public MainEmpty(string userName)
+        public MainEmpty(string userName, Guid userId)
         {
             InitializeComponent();
             this.userName = userName;
             UserNameBlock.Text = userName;
             userTasks = new List<TaskDictionary>();
-
-            // Animation for UserNameBlock
-            var animation = new DoubleAnimation
-            {
-                From = 0.0,
-                To = 1.0,
-                Duration = new Duration(TimeSpan.FromSeconds(1))
-            };
-            UserNameBlock.BeginAnimation(UIElement.OpacityProperty, animation);
+            this.userId = userId;
         }
 
         private void ProfileImageSwitch_Click(object sender, RoutedEventArgs e)
@@ -64,7 +56,7 @@ namespace Desktop.View
 
         private void zada4aB_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new CreateNewTask(userName, userTasks));
+            this.NavigationService.Navigate(new CreateNewTask(userName, userTasks, userId));
         }
     }
 }
