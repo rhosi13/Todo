@@ -9,9 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\profile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="images\profile.png" />
   </ItemGroup>
 
 </Project>
